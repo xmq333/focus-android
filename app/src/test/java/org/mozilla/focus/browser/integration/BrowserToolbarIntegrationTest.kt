@@ -7,7 +7,7 @@ package org.mozilla.focus.browser.integration
 import android.view.View
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import mozilla.components.browser.state.action.ContentAction
@@ -39,7 +39,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class BrowserToolbarIntegrationTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = TestCoroutineDispatcher()
     private val selectedTab = createSecureTab()
 
     private lateinit var toolbar: BrowserToolbar
@@ -95,6 +95,7 @@ class BrowserToolbarIntegrationTest {
     @ExperimentalCoroutinesApi
     fun tearDown() {
         Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
@@ -191,7 +192,7 @@ class BrowserToolbarIntegrationTest {
             )
         ).joinBlocking()
 
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.advanceUntilIdle()
     }
 
     private fun updateTabUrl(url: String) {
@@ -199,7 +200,7 @@ class BrowserToolbarIntegrationTest {
             ContentAction.UpdateUrlAction(selectedTab.id, url)
         ).joinBlocking()
 
-        testDispatcher.scheduler.advanceUntilIdle()
+        testDispatcher.advanceUntilIdle()
     }
 
     private fun createSecureTab(): TabSessionState {

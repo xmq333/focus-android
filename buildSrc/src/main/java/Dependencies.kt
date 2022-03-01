@@ -28,7 +28,7 @@ object Versions {
 
     object Kotlin {
         const val version = "1.6.10"
-        const val coroutines = "1.6.0"
+        const val coroutines = "1.5.2"
     }
 
     object Gradle {
